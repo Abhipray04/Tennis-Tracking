@@ -1,9 +1,9 @@
 <h1 align='center'>Tennis Tracking</h1>
 
-![Forks](https://img.shields.io/github/forks/ArtLabss/tennis-tracking.svg)
-![Stars](https://img.shields.io/github/stars/ArtLabss/tennis-tracking.svg)
-![Watchers](https://img.shields.io/github/watchers/ArtLabss/tennis-tracking.svg)
-![Last Commit](https://img.shields.io/github/last-commit/ArtLabss/tennis-tracking.svg) 
+![Forks](https://img.shields.io/github/forks/shukkkur/tennis-tracking.svg)
+![Stars](https://img.shields.io/github/stars/shukkkur/tennis-tracking.svg)
+![Watchers](https://img.shields.io/github/watchers/shukkkur/tennis-tracking.svg)
+![Last Commit](https://img.shields.io/github/last-commit/shukkkur/tennis-tracking.svg) 
 
 <h3>Objectvies</h3>
 <ul>
