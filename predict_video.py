@@ -22,11 +22,13 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("--input_video_path", type=str)
 parser.add_argument("--output_video_path", type=str, default="")
+parser.add_argument("--minimap", type=int, default=0)
 
 args = parser.parse_args()
 
 input_video_path = args.input_video_path
 output_video_path = args.output_video_path
+minimap = args.minimap
 
 n_classes = 256
 save_weights_path = 'WeightsTracknet/model.1'
@@ -70,7 +72,6 @@ q = queue.deque()
 for i in range(0, 8):
     q.appendleft(None)
 
-
 # save prediction images as videos
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 output_video = cv2.VideoWriter(output_video_path, fourcc, fps, (output_width, output_height))
@@ -90,6 +91,7 @@ detection_model = DetectionModel(dtype=dtype)
 # get videos properties
 fps, length, v_width, v_height = get_video_properties(video)
 
+coords = []
 frame_i = 0
 frames = []
 
@@ -99,7 +101,7 @@ while True:
 
   if ret:
     if frame_i == 1:
-      print('First Frame')
+      print('Detecting the court and the players...')
       lines = court_detector.detect(frame)
     else: # then track it
       lines = court_detector.track_court(frame)
@@ -117,7 +119,7 @@ while True:
   else:
     break
 video.release()
-print('First Video Released')
+print('Finished!')
 
 detection_model.find_player_2_box()
 
@@ -130,7 +132,7 @@ frame_i = 0
 
 # while (True):
 for img in frames:
-    print('Percentage of video processed : {}'.format(round( (currentFrame / total) * 100, 2)))
+    print('Tracking the ball: {}'.format(round( (currentFrame / total) * 100, 2)))
     frame_i += 1
 
     # detect the ball
@@ -163,7 +165,7 @@ for img in frames:
 
     # find the circle in image with 2<=radius<=7
     circles = cv2.HoughCircles(heatmap, cv2.HOUGH_GRADIENT, dp=1, minDist=1, param1=50, param2=2, minRadius=2,
-                               maxRadius=7)
+                              maxRadius=7)
 
 
     output_img = mark_player_box(output_img, player1_boxes, currentFrame-1)
@@ -180,18 +182,22 @@ for img in frames:
             x = int(circles[0][0][0])
             y = int(circles[0][0][1])
 
+            coords.append([x,y])
+
             # push x,y to queue
             q.appendleft([x, y])
             # pop x,y from queue
             q.pop()
 
         else:
+            coords.append(None)
             # push None to queue
             q.appendleft(None)
             # pop x,y from queue
             q.pop()
 
     else:
+        coords.append(None)
         # push None to queue
         q.appendleft(None)
         # pop x,y from queue
@@ -209,12 +215,46 @@ for img in frames:
 
     # Convert PIL image format back to opencv image format
     opencvImage = cv2.cvtColor(np.array(PIL_image), cv2.COLOR_RGB2BGR)
+
     output_video.write(opencvImage)
 
     # next frame
     currentFrame += 1
 
-
 # everything is done, release the video
 video.release()
+output_video.release()
+
+if minimap == 1:
+  game_video = cv2.VideoCapture(output_video_path)
+
+  fps1 = int(game_video.get(cv2.CAP_PROP_FPS))
+
+  output_width = int(game_video.get(cv2.CAP_PROP_FRAME_WIDTH))
+  output_height = int(game_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+  print('game ', fps1)
+  output_video = cv2.VideoWriter('VideoOutput/final_video.mp4', fourcc, fps, (output_width, output_height))
+  
+  print('Adding the mini-map...')
+
+  # Remove Outliers 
+  x, y = diff_xy(coords)
+  remove_outliers(x, y, coords)
+  # Interpolation
+  coords = iterpolation(coords)
+  create_top_view(court_detector, detection_model, coords, fps)
+  minimap_video = cv2.VideoCapture('VideoOutput/minimap.mp4')
+  fps2 = int(minimap_video.get(cv2.CAP_PROP_FPS))
+  print('minimap ', fps2)
+  while True:
+    ret, frame = game_video.read()
+    ret2, img = minimap_video.read()
+    if ret:
+      output = merge(frame, img)
+      output_video.write(output)
+    else:
+      break
+
+game_video.release()
+minimap_video.release()
 output_video.release()

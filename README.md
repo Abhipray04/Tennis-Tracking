@@ -54,7 +54,7 @@ Input            |  Output
   </li>
   
   ```python
-  python predict_video.py --input_video_path=VideoInput/video_input3.mp4 --output_video_path=VideoOutput/video_output.mp4 
+  python predict_video.py --input_video_path=VideoInput/video_input3.mp4 --output_video_path=VideoOutput/video_output.mp4 --minimap=0
   ```
   
   <li>If you are using Google Colab upload all the files to Google Drive</li>
@@ -90,10 +90,10 @@ Input            |  Output
   </li>
   
   ```
-   !python3 predict_video.py --input_video_path=VideoInput/video_input3.mp4 --output_video_path=VideoOutput/video_output.mp4 
+   !python3 predict_video.py --input_video_path=VideoInput/video_input3.mp4 --output_video_path=VideoOutput/video_output.mp4 --minimap=0
   ```
   
-  <p>After the compilation is completed, a new video will be created in <a href="/VideoOutput" target="_blank">VideoOutput folder</a></p>
+  <p>After the compilation is completed, a new video will be created in <a href="/VideoOutput" target="_blank">VideoOutput folder</a> if <code>--minimap</code> was set <code>0</code>, if <code>--minimap=1</code> three videos will be created: video of the game, video of minimap and a combined video of both</p>
   <p><i>P.S. If you stumble upon an <b>error</b> or have any questions feel free to open a new <a href='https://github.com/ArtLabss/tennis-tracking/issues'>Issue</a> </i></p>
   
 </ol>
@@ -105,8 +105,13 @@ Input            |  Output
   <li>Player detection improved</li>
   <li>The algorithm now works practically with any court colors</li>
   <li>Faster algorithm</li>
-</ul>
-
+  <li>Dynamic Mini-Map with players and ball added, to activate use argument <code>--minimap</code></li>
+  </ul>
+  
+`--minimap=0`            |  `--minimap=1`
+:-------------------------:|:-------------------------:
+![input_img1](https://github.com/ArtLabss/tennis-tracking/blob/0f684fdeef96a715984dc74b62b961f68ff95edc/VideoOutput/ezgif.com-gif-maker.gif)  |  ![output_img1](https://github.com/ArtLabss/tennis-tracking/blob/main/VideoOutput/minimap.gif)
+<br>
 <h3>Further Developments</h3>
 <ul>
   <li><strike>Improve line detection of the court and remove overlapping lines</strike></li>
@@ -116,7 +121,7 @@ Input            |  Output
   <li>Detect players on videos with different angles</li>
   <li>Find the coordinates of the ball touching the court and display them</li>
   <li>Code Optimization</li>
-  <li>Dynamic court mini-map with players and the ball</li>
+  <li><strike>Dynamic court mini-map with players and the ball</strike></li>
 </ul>
 
 <h3>Current Drawbacks</h3>
