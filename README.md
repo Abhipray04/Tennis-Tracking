@@ -2,7 +2,7 @@
   <img src='https://github.com/ArtLabss/tennis-tracking/blob/4c25e5f32f2e4ea526f4153226497c2b1ec1f128/VideoOutput/artlabs.png' >
 </p>
 
-<h1 align='center'>Tennis Tracking 🎾</h1>
+<h1 align='center'>pyHawk 🎾</h1>
 <p align='center'>
 <img src="https://img.shields.io/github/forks/shukkkur/Tennis-Tracking.svg"></a>
   <img src="https://img.shields.io/github/stars/shukkkur/Tennis-Tracking.svg"></a>
